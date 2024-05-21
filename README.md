@@ -334,7 +334,7 @@ XMM15
 | 5 | R8 |
 | 6 | R9 |
 
-* See [Linux System Call Table](https://thevivekpandey.github.io/posts/2017-09-25-linux-system-calls.html) for list of all Linux system calls
+* See [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit) for list of all Linux system calls
 
 ### sys_write file descriptors
 
