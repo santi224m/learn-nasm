@@ -15,6 +15,8 @@ This repository will record my learning to write x86 assembly language using NAS
    - [Assembling with nasm and gcc](#assembling-with-nasm-and-gcc)
 4. [NASM Program Structure](#nasm-program-structure)
 5. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
+6. [Instructions](#instructions)
+7. [Registers](#registers)
 
 ## Installing NASM
 
@@ -151,3 +153,159 @@ Ouput of running objdump
 
 // Rest of output
 ```
+
+## Instructions
+
+* ```mov a, b``` - Move b to a
+* ```and a, b``` - a AND b stored at a
+* ```or a, b``` - a OR b stored at a
+* ```xor a, b``` - a XOR b stored at a
+* ```add a, b``` - Add a and b; Store at a
+* ```sub a, b``` - Subtract a - b; Store at a
+* ```inc a``` - Increment a
+* ```dec a``` - Decreemnt a
+* ```syscall n``` - Call OS routine n
+* ```db``` - Declares bytes that will be in memory when the program runs (pseudo-instruction)
+
+Other Pseudo-Instructions for declaring initialized data
+
+```txt
+      db    0x55                ; just the byte 0x55 
+      db    0x55,0x56,0x57      ; three bytes in succession 
+      db    'a',0x55            ; character constants are OK 
+      db    'hello',13,10,'$'   ; so are string constants 
+      dw    0x1234              ; 0x34 0x12 
+      dw    'a'                 ; 0x61 0x00 (it's just a number) 
+      dw    'ab'                ; 0x61 0x62 (character constant) 
+      dw    'abc'               ; 0x61 0x62 0x63 0x00 (string) 
+      dd    0x12345678          ; 0x78 0x56 0x34 0x12 
+      dd    1.234567e20         ; floating-point constant 
+      dq    0x123456789abcdef0  ; eight byte constant 
+      dq    1.234567e20         ; double-precision float 
+      dt    1.234567e20         ; extended-precision float
+```
+
+## Registers
+
+![Registers Table](./assets/Table_of_x86_Registers_svg.svg)
+
+### 16 integer registers (64 bits wide)
+
+Full 64 bits
+
+```txt
+R0 -- RAX
+R1 -- RCX
+R2 -- RDX
+R3 -- RBX
+R4 -- RSP
+R5 -- RBP
+R6 -- RSI
+R7 -- RDI
+R8
+R9
+R10
+R11
+R12
+R13
+R14
+15
+```
+
+Lowest 32-bits
+
+```txt
+R0D -- EAX
+R1D -- ECX
+R2D -- EDX
+R3D -- EBX
+R4D -- ESP
+R5D -- EBP
+R6D -- ESI
+R7D -- EDI
+R8D
+R9D
+R10D
+R11D
+R12D
+R13D
+R14D
+15D
+```
+
+Lowest 16-bits
+
+```txt
+R0W -- AX
+R1W -- CX
+R2W -- DX
+R3W -- BX
+R4W -- SP
+R5W -- BP
+R6W -- SI
+R7W -- DI
+R8W
+R9W
+R10W
+R11W
+R12W
+R13W
+R14W
+15W
+```
+
+Lowest 8-bits
+
+```txt
+R0B -- AL
+R1B -- CL
+R2B -- DL
+R3B -- BL
+R4B -- SPL
+R5B -- BPL
+R6B -- SIL
+R7B -- DIL
+R8B
+R9B
+R10B
+R11B
+R12B
+R13B
+R14B
+15B
+```
+
+bits 15 through 8 (high order bits) of R0..R3
+
+```txt
+AH
+BH
+CH
+DH
+```
+
+![Integer Registers](./assets/x86_integer_registers.png)
+
+
+### 16 XMM registers (128 bits wide)
+
+```txt
+XMM0
+XMM1
+XMM2
+XMM3
+XMM4
+XMM5
+XMM6
+XMM7
+XMM8
+XMM9
+XMM10
+XMM11
+XMM12
+XMM13
+XMM14
+XMM15
+```
+
+![XMM Registers](./assets/x86_XMM_registers.png)
