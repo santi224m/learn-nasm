@@ -42,9 +42,57 @@ sudo apt install nasm
 
 ### Assembling with nasm and ld
 
+Example program to compile
+
+
+```print_hello.asm```
+```asm
+	section .data
+msg:	db	"Enter your name: "	; 17 bytes
+hello_msg: db	"Hello, "		; 7 bytes
+name:	db	15			; 15 bytes
+
+	section	.text
+	global _start
+
+_start:	; Prompt user for name
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, msg
+	mov rdx, 17
+	syscall
+
+	; Get name from user
+	mov rax, 0
+	mov rdi, 0
+	mov rsi, name
+	mov rdx, 15
+	syscall
+
+	; Say hello to user
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, hello_msg
+	mov rdx, 7
+	syscall
+
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, name
+	mov rdx, 15
+	syscall
+
+	; Exit program
+	mov rax, 60
+	mov rdi, 0
+	syscall
+
+```
+
 ```bash
-nasm -f elf64 ASM_PROGRAM
-ld OBJECT_CODE -o EXECUTABLE_NAME
+nasm -f elf64 print_hello.asm
+ld print_hello.o -o print_hello
+./print_hello
 ```
 
 * ```-f elf64``` - format the object code file in ***elf64*** format (ELF64 (x86-64) (Linux, most Unix variants))
@@ -56,8 +104,9 @@ ld OBJECT_CODE -o EXECUTABLE_NAME
 * Better when using c standard library
 
 ```bash
-nasm -f elf64 ASM_PROGRAM
-gcc -no-pie OBJECT_CODE -o EXECUTABLE_NAME
+nasm -f elf64 print_hello.asm
+gcc -no-pie print_hello.o -o print_hello
+./print_hello
 ```
 
 ## NASM program structure
