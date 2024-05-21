@@ -17,6 +17,8 @@ This repository will record my learning to write x86 assembly language using NAS
 5. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
 6. [Instructions](#instructions)
 7. [Registers](#registers)
+8. [System Calls](#system-calls)
+9. [Sections](#sections)
 
 ## Installing NASM
 
@@ -31,6 +33,10 @@ sudo apt install nasm
 [AMD64 Architecture Programmer’s Manual Volumes 1-5](https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/40332.pdf)
 
 [NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
+
+[ x86_64 Linux Assembly YouTube Playlist](https://youtube.com/playlist?list=PLetF-YjXm-sCH6FrTz4AQhfH6INDQvQSn&si=toV9gOHZ-j73TPxk)
+
+[Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit)
 
 ## Assembling Programs
 
@@ -209,7 +215,7 @@ R11
 R12
 R13
 R14
-15
+R15
 ```
 
 Lowest 32-bits
@@ -230,7 +236,7 @@ R11D
 R12D
 R13D
 R14D
-15D
+R15D
 ```
 
 Lowest 16-bits
@@ -251,7 +257,7 @@ R11W
 R12W
 R13W
 R14W
-15W
+R15W
 ```
 
 Lowest 8-bits
@@ -272,7 +278,7 @@ R11B
 R12B
 R13B
 R14B
-15B
+R15B
 ```
 
 bits 15 through 8 (high order bits) of R0..R3
@@ -309,3 +315,45 @@ XMM15
 ```
 
 ![XMM Registers](./assets/x86_XMM_registers.png)
+
+## System Calls
+
+* System calls are when program requests service from kernal.
+
+* Each syscall has an ID
+
+* Registers for system call ID and arguments:
+
+| Argument | Register |
+| -------- | --------- |
+| ID | RAX |
+| 1 | RDI |
+| 2 | RSI |
+| 3 | RDX |
+| 4 | R10 |
+| 5 | R8 |
+| 6 | R9 |
+
+* See [Linux System Call Table](https://thevivekpandey.github.io/posts/2017-09-25-linux-system-calls.html) for list of all Linux system calls
+
+### sys_write file descriptors
+
+| Integer | Description |
+| ------- | ----------- |
+| 0 | Standard Input |
+| 1 | Standard Output |
+| 2 | Standard Error |
+
+### Common syscalls
+
+| # | syscall | rax | rdi | rsi | rdx | r10 | r8 | r9 |
+| - | ------- | --- | --- | --- | --- | --- | -- | -- |
+| 1 | write | 1 | unsigned int fd | const char *buf | size_t count | - | - | - |
+| 60 | exit | 60 | int error_code | - | - | - | - | - |
+
+## Sections
+
+* All assembly programs have the following sections:
+  * ```.data``` - Where all data is defined before compilation
+  * ```.bss``` - Where data is allocated for future use
+  * ```.text``` - Main program
