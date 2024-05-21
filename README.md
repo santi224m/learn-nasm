@@ -40,8 +40,6 @@ sudo apt install nasm
 
 ## Assembling Programs
 
-### Assembling with nasm and ld
-
 Example program to compile
 
 
@@ -89,6 +87,8 @@ _start:	; Prompt user for name
 
 ```
 
+### Assembling with nasm and ld
+
 ```bash
 nasm -f elf64 print_hello.asm
 ld print_hello.o -o print_hello
@@ -102,6 +102,7 @@ ld print_hello.o -o print_hello
 ### Assembling with nasm and gcc
 
 * Better when using c standard library
+* **Note**: To assemble ```print_hello.asm``` program above with gcc, you must replace ```_start``` label with ```main```
 
 ```bash
 nasm -f elf64 print_hello.asm
