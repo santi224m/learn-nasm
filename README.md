@@ -87,11 +87,11 @@ Each line in a program can be made of the following:
 * ```add a, b``` - Add a and b; Store at a
 * ```sub a, b``` - Subtract a - b; Store at a
 * ```inc a``` - Increment a
-* ```dec a``` - Decreemnt a
+* ```dec a``` - Decrement a
 * ```syscall n``` - Call OS routine n
 * ```db``` - Declares bytes that will be in memory when the program runs (pseudo-instruction)
 
-Other Pseudo-Instructions for declaring initialized data
+### Pseudo-Instructions for declaring initialized data
 
 ```txt
       db    0x55                ; just the byte 0x55 
@@ -240,19 +240,19 @@ XMM15
 
 * Each syscall has an ID
 
-* See [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit) for list of all Linux system calls and their IDs
+* See [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit) for list of all Linux system calls and their IDs and arguments
 
 * Registers for system call ID and arguments:
 
 | Argument | Register |
 | -------- | --------- |
-| ID | RAX |
-| 1 | RDI |
-| 2 | RSI |
-| 3 | RDX |
-| 4 | R10 |
-| 5 | R8 |
-| 6 | R9 |
+| ID | rax |
+| 1 | rdi |
+| 2 | rsi |
+| 3 | rdx |
+| 4 | r10 |
+| 5 | r8 |
+| 6 | r9 |
 
 
 ### File Descriptors (fd)
@@ -273,8 +273,7 @@ XMM15
 
 ## Using ```objdump``` to view executable instructions
 
-You can use the ```objdump``` command to view the assembly instructions used in an object file.
-
+You can use the ```objdump``` command to view the assembly instructions in an object file.
 
 ```add.c```
 ```c
@@ -323,7 +322,7 @@ with the -M switch (multiple options should be separated by commas):
 
 ```
 
-Ouput of running objdump
+Ouput of running ```objdump -d a.out -M intel```
 
 ```bash
 // Rest of output
