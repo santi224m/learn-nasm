@@ -68,6 +68,25 @@ I should note that I have completed a college course in computer architecture, w
 | double | Double precision | d | 8 |
 | long double | Extended precision | t | 16 |
 
+## GAS Suffixes
+
+```GAS``` - GNU Assembler
+
+```word``` - The natural size with which a processor is handling data (the register size)
+  * x86_64 is an extension of 32-bit x86
+  * 32-bit x86 extended 16-bit architecture.
+  * 16-bit architecture had word of 2 bytes (16 bits) so x86_64 also uses word of 2 bytes for backward compatibility
+
+| GAS Suffix | Type | Size (Bytes) |
+| ---------- | ---- | ------------ |
+| b | Byte | 1 |
+| w | Word | 2 |
+| l | Double Word | 4 |
+| q | Quad word | 8 |
+| s | Single precision | 4 |
+| d | Double precision | 8 |
+| t | Extended precision | 16 |
+
 ## Instructions
 
 | Instruction | Description | Purpose | Example |
