@@ -18,7 +18,7 @@ This repository will record my learning to write x86 assembly language using NAS
 1. [System Calls](#system-calls)
     - [File Descriptors (fd)](#file-descriptors-fd)
     - [Common syscalls](#common-syscalls)
-1. [Memory Operands](#memory-operands)
+1. [Data Type Sizes](#data-type-sizes)
 1. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
 
 ## Installing NASM
@@ -38,6 +38,8 @@ sudo apt install nasm
 [ x86_64 Linux Assembly YouTube Playlist](https://youtube.com/playlist?list=PLetF-YjXm-sCH6FrTz4AQhfH6INDQvQSn&si=toV9gOHZ-j73TPxk)
 
 [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit)
+
+[x86-64 Machine-Level Programming](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f09/www/misc/asm64-handout.pdf)
 
 ## Assembling Programs
 
@@ -291,7 +293,7 @@ XMM15
 
 * Each syscall has an ID
 
-* See [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit) for list of all Linux system calls and their IDs and arguments
+* See [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit) for list of all Linux system calls with their IDs and arguments
 
 * Registers for system call ID and arguments:
 
@@ -330,6 +332,21 @@ XMM15
 | Floating point arguments 1-8  | XMM0 - XMM7 |
 | Excess arguments | Stack |
 | Static chain pointer  | R10 |
+
+## Data Type Sizes
+
+| C type | Processor type | GAS suffix | x86-64 Size (Bytes) |
+| ------ | -------------- | ---------- | ------------------- |
+| char | Byte | b | 1 |
+| short | Word | w | 2 |
+| int | Double Word | l | 4 |
+| unsigned | Double word | l | 4|
+| long int | Quad word | q | 8 |
+| unsigned long | Quad word | q | 8 |
+| char * | Quad word | q | 8 |
+| float | Single precision | s | 4 |
+| double | Double precision | d | 8 |
+| long double | Extended precision | t | 16 |
 
 ## Using ```objdump``` to view executable instructions
 
