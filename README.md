@@ -15,6 +15,7 @@ I should note that I have completed a college course in computer architecture, w
 1. [Resources](#resources)
 1. [What is x86-64](#what-is-x86-64)
 1. [Data Type Sizes](#data-type-sizes)
+1. [GAS Suffixes](#gas-suffixes)
 1. [Instructions](#instructions)
 1. [NASM Pseudo-Instructions](#nasm-pseudo-instructions)
 1. [Registers](#registers)
@@ -118,6 +119,12 @@ I should note that I have completed a college course in computer architecture, w
 ![Registers Table](./assets/Table_of_x86_Registers_svg.svg)
 
 ### 16 integer registers (64 bits wide)
+
+* Register ```rsp``` holds a pointer to the top stack element
+* No stack frame in x86_64; ```rbp``` is general purpose register
+  * ```ebp``` was stack frame in x86
+* Program counter is named ```rip```
+  * [Program counter](https://en.wikipedia.org/wiki/Program_counter) is a register that indicates where a computer is in its program sequence
 
 | Full 64 bits | Lowest 32-bits | Lowest 16-bits | Highest 8-bits | Lowest 8-bits | Notes |
 | ------------ | -------------- | -------------- | -------------- | ------------- | ----- |
@@ -303,7 +310,7 @@ Each line in a program can be made of the following:
 
 ## Using ```objdump``` to view executable instructions
 
-You can use the ```objdump``` command to view the assembly instructions in an object file.
+You can use the ```objdump``` disassembler command to view the assembly instructions in an object file.
 
 ```add.c```
 ```c
@@ -356,9 +363,7 @@ Ouput of running ```objdump -d a.out -M intel```
 
 ```bash
 // Rest of output
-
-0000000000001149 <main>:
-    1149:	55                   	push   rbp
+disassemblerrbp
     114a:	48 89 e5             	mov    rbp,rsp
     114d:	48 83 ec 10          	sub    rsp,0x10
     1151:	c7 45 fc 05 00 00 00 	mov    DWORD PTR [rbp-0x4],0x5
