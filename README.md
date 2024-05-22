@@ -259,51 +259,16 @@ ld print_hello.o -o print_hello
 * **Note**: To assemble ```print_hello.asm``` program above with gcc, you must replace ```_start``` label with ```main```
 
 ```bash
-nasm ## Registers
-
-![Registers Table](./assets/Table_of_x86_Registers_svg.svg)
-
-### 16 integer registers (64 bits wide)
-
-| Full 64 bits | Lowest 32-bits | Lowest 16-bits | Highest 8-bits | Lowest 8-bits | Notes |
-| ------------ | -------------- | -------------- | -------------- | ------------- | ----- |
-| rax | eax | ax | ah | al | Return value |
-| rbx | ebx | bx | bh | bl | Callee saved |
-| rcx | ecx | cx | ch | cl | 4th argument |
-| rdx | edx | dx | dh | dl | 3rd argument |
-| rsi | esi | si | | sil | 2nd argument |
-| rdi | edi | di | | dil | 1st argument |
-| rbp | ebp | bp | | bpl | Callee saved |
-| rsp | esp | sp | | spl | Stack pointer |
-| r8 | r8d | r8w | | r8b | 5th argument |
-| r9 | r9d | r9w | | r9b | 6th argument |
-| r10 | r10d |  r10w | | r10b | Callee saved |
-| r11 | r11d | r11w | | r11b | Used for linking |
-| r12 | r12d | r12w | | r12b | Unused for C |
-| r13 | r13d | r13w | | r13b | Callee saved |
-| r14 | r14d | r14w | | r14b | Callee saved |
-| r15 | r15d | r15w | | r15b | Callee saved |
-
-### 16 XMM registers (128 bits wide)
-
-```txt
-XMM0
-XMM1
-XMM2
-XMM3
-XMM4
-XMM5
-XMM6
-XMM7
-XMM8
-XMM9
-XMM10
-XMM11
-XMM12
-XMM13
-XMM14
-XMM15
+nasm -f elf64 print_hello.asm
+gcc -no-pie print_hello.o -o print_hello
+./print_hello
 ```
+
+## NASM program structure
+
+Programs are made of two types of sections:
+  * Directives
+  * Sections
 
 Each line in a program can be made of the following:
   * Label
