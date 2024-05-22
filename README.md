@@ -14,16 +14,17 @@ I should note that I have completed a college course in computer architecture, w
 
 1. [Resources](#resources)
 1. [What is x86-64](#what-is-x86-64)
-1. [Installing NASM](#installing-nasm)
-1. [Assembling Programs](#assembling-programs)
-1. [NASM Program Structure](#nasm-program-structure)
-1. [Sections](#sections)
+1. [Data Type Sizes](#data-type-sizes)
 1. [Instructions](#instructions)
+1. [NASM Pseudo-Instructions](#nasm-pseudo-instructions)
 1. [Registers](#registers)
 1. [System Calls](#system-calls)
     - [File Descriptors (fd)](#file-descriptors-fd)
     - [Common syscalls](#common-syscalls)
-1. [Data Type Sizes](#data-type-sizes)
+1. [Installing NASM](#installing-nasm)
+1. [Assembling Programs](#assembling-programs)
+1. [NASM Program Structure](#nasm-program-structure)
+1. [Sections](#sections)
 1. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
 
 ## Resources
@@ -52,12 +53,144 @@ I should note that I have completed a college course in computer architecture, w
 * Sometimes referred to as x64
 * 16 general-purpose registers
 
+## Data Type Sizes
+
+| C type | Processor type | GAS suffix | x86-64 Size (Bytes) |
+| ------ | -------------- | ---------- | ------------------- |
+| char | Byte | b | 1 |
+| short | Word | w | 2 |
+| int | Double Word | l | 4 |
+| unsigned | Double word | l | 4|
+| long int | Quad word | q | 8 |
+| unsigned long | Quad word | q | 8 |
+| char * | Quad word | q | 8 |
+| float | Single precision | s | 4 |
+| double | Double precision | d | 8 |
+| long double | Extended precision | t | 16 |
+
+## Instructions
+
+| Instruction | Description | Purpose | Example |
+| ----------- | ----------- | ------- | ------- |
+| mov | mov op, op | Moves data from the source operand to the destination operand. | mov eax, ebx |
+| and | and op, op | Performs a bitwise AND on the operands. | and eax, ebx |
+| or | or op, op | Performs a bitwise OR on the operands. | or eax, ebx |
+| xor | xor op, op | Performs a bitwise XOR on the operands. | xor eax, ebx |
+| add | add op, op | Adds the second operand to the first. | add eax, ebx |
+| sub | sub op, op | Subtracts the second operand from the first. | sub eax, ebx |
+| inc | inc op | Increments the operand by 1. | inc eax |
+| dec | dec op | Decrements the operand by 1. | dec eax |
+| syscall | syscall | Triggers a system call handled by the OS kernel. | syscall |
+
+## NASM Pseudo-Instructions
+
+> Pseudo-instructions are things which, though not real x86 machine instructions, are used in the instruction field anyway because that's the most convenient place to put them. [(NASM Docs)](https://www.nasm.us/doc/nasmdoc3.html#section-3.2)
+
+| Instruction | Syntax | Description | Example |
+| ----------- | ------ | ----------- | ------- |
+| db | db value[, ...] | Defines one or more bytes. | db 'hello', 0x55 |
+| dw | dw value[, ...] | Defines one or more word (2 bytes). | dw 0x1234, 'a', 'ab' |
+| dd | dd value[, ...] | Defines one or more double word (4 bytes). | dd 0x12345678, 1.234567e20 |
+| dq | dq value[, ...] | Defines one or more quad word (8 bytes). | dq 0x123456789abcdef0, 1.234567e20 |
+| dt | dt value[, ...] | Defines one ten-byte floating point number. | dt 1.234567e20 |
+
+## Registers
+
+![Registers Table](./assets/Table_of_x86_Registers_svg.svg)
+
+### 16 integer registers (64 bits wide)
+
+| Full 64 bits | Lowest 32-bits | Lowest 16-bits | Highest 8-bits | Lowest 8-bits | Notes |
+| ------------ | -------------- | -------------- | -------------- | ------------- | ----- |
+| rax | eax | ax | ah | al | Return value |
+| rbx | ebx | bx | bh | bl | Callee saved |
+| rcx | ecx | cx | ch | cl | 4th argument |
+| rdx | edx | dx | dh | dl | 3rd argument |
+| rsi | esi | si | | sil | 2nd argument |
+| rdi | edi | di | | dil | 1st argument |
+| rbp | ebp | bp | | bpl | Callee saved |
+| rsp | esp | sp | | spl | Stack pointer |
+| r8 | r8d | r8w | | r8b | 5th argument |
+| r9 | r9d | r9w | | r9b | 6th argument |
+| r10 | r10d |  r10w | | r10b | Callee saved |
+| r11 | r11d | r11w | | r11b | Used for linking |
+| r12 | r12d | r12w | | r12b | Unused for C |
+| r13 | r13d | r13w | | r13b | Callee saved |
+| r14 | r14d | r14w | | r14b | Callee saved |
+| r15 | r15d | r15w | | r15b | Callee saved |
+
+### 16 XMM registers (128 bits wide)
+
+| 128 bits |
+| -------- |
+| XMM0 |
+| XMM1 |
+| XMM2 |
+| XMM3 |
+| XMM4 |
+| XMM5 |
+| XMM6 |
+| XMM7 |
+| XMM8 |
+| XMM9 |
+| XMM10 |
+| XMM11 |
+| XMM12 |
+| XMM13 |
+| XMM14 |
+| XMM15 |
+
+## System Calls
+
+* System calls are when program requests service from kernel.
+
+* Each syscall has an ID
+
+* See [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit) for list of all Linux system calls with their IDs and arguments
+
+* Registers for system call ID and arguments:
+
+| Argument | Register |
+| -------- | --------- |
+| ID | rax |
+| 1 | rdi |
+| 2 | rsi |
+| 3 | rdx |
+| 4 | r10 |
+| 5 | r8 |
+| 6 | r9 |
+
+
+### File Descriptors (fd)
+
+| Integer | Description |
+| ------- | ----------- |
+| 0 | Standard Input |
+| 1 | Standard Output |
+| 2 | Standard Error |
+
+### Common syscalls
+
+| # | syscall | rax | rdi | rsi | rdx | r10 | r8 | r9 |
+| - | ------- | --- | --- | --- | --- | --- | -- | -- |
+| 0 | read | 0 | unsigned int fd | char *buf | size_t count | - | - | - |
+| 1 | write | 1 | unsigned int fd | const char *buf | size_t count | - | - | - |
+| 60 | exit | 60 | int error_code | - | - | - | - | - |
+
+## Argument register overview
+
+| Argument type | Registers |
+| ------------- | --------- |
+| Integer/pointer arguments 1-6 | RDI, RSI, RDX, RCX, R8, R9  |
+| Floating point arguments 1-8  | XMM0 - XMM7 |
+| Excess arguments | Stack |
+| Static chain pointer  | R10 |
+
 ## Installing NASM
 
 ```bash
 sudo apt install nasm
 ```
-
 
 ## Assembling Programs
 
@@ -116,7 +249,7 @@ ld print_hello.o -o print_hello
 ./print_hello
 ```
 
-* ```-f elf64``` - format the object code file in ***elf64*** format (ELF64 (x86-64) (Linux, most Unix variants))
+* ```-f elf64``` - format the object code file in ***elf64*** format  (ELF64 (x86-64) (Linux, most Unix variants))
 
 * ```ld``` - The GNU linker
 
@@ -126,61 +259,7 @@ ld print_hello.o -o print_hello
 * **Note**: To assemble ```print_hello.asm``` program above with gcc, you must replace ```_start``` label with ```main```
 
 ```bash
-nasm -f elf64 print_hello.asm
-gcc -no-pie print_hello.o -o print_hello
-./print_hello
-```
-
-## NASM program structure
-
-Programs are made of two types of sections:
-  * Directives
-  * Sections
-
-Each line in a program can be made of the following:
-  * Label
-  * Instruction
-  * Operands
-
-## Sections
-
-* All assembly programs have the following sections:
-  * ```.data``` - Where all data is defined before compilation
-  * ```.bss``` - Where data is allocated for future use
-  * ```.text``` - Main program
-
-## Instructions
-
-* ```mov a, b``` - Move b to a
-* ```and a, b``` - a AND b stored at a
-* ```or a, b``` - a OR b stored at a
-* ```xor a, b``` - a XOR b stored at a
-* ```add a, b``` - Add a and b; Store at a
-* ```sub a, b``` - Subtract a - b; Store at a
-* ```inc a``` - Increment a
-* ```dec a``` - Decrement a
-* ```syscall n``` - Call OS routine n
-* ```db``` - Declares bytes that will be in memory when the program runs (pseudo-instruction)
-
-### Pseudo-Instructions for declaring initialized data
-
-```txt
-      db    0x55                ; just the byte 0x55 
-      db    0x55,0x56,0x57      ; three bytes in succession 
-      db    'a',0x55            ; character constants are OK 
-      db    'hello',13,10,'$'   ; so are string constants 
-      dw    0x1234              ; 0x34 0x12 
-      dw    'a'                 ; 0x61 0x00 (it's just a number) 
-      dw    'ab'                ; 0x61 0x62 (character constant) 
-      dw    'abc'               ; 0x61 0x62 0x63 0x00 (string) 
-      dd    0x12345678          ; 0x78 0x56 0x34 0x12 
-      dd    1.234567e20         ; floating-point constant 
-      dq    0x123456789abcdef0  ; eight byte constant 
-      dq    1.234567e20         ; double-precision float 
-      dt    1.234567e20         ; extended-precision float
-```
-
-## Registers
+nasm ## Registers
 
 ![Registers Table](./assets/Table_of_x86_Registers_svg.svg)
 
@@ -226,66 +305,17 @@ XMM14
 XMM15
 ```
 
-## System Calls
+Each line in a program can be made of the following:
+  * Label
+  * Instruction
+  * Operands
 
-* System calls are when program requests service from kernel.
+## Sections
 
-* Each syscall has an ID
-
-* See [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit) for list of all Linux system calls with their IDs and arguments
-
-* Registers for system call ID and arguments:
-
-| Argument | Register |
-| -------- | --------- |
-| ID | rax |
-| 1 | rdi |
-| 2 | rsi |
-| 3 | rdx |
-| 4 | r10 |
-| 5 | r8 |
-| 6 | r9 |
-
-
-### File Descriptors (fd)
-
-| Integer | Description |
-| ------- | ----------- |
-| 0 | Standard Input |
-| 1 | Standard Output |
-| 2 | Standard Error |
-
-### Common syscalls
-
-| # | syscall | rax | rdi | rsi | rdx | r10 | r8 | r9 |
-| - | ------- | --- | --- | --- | --- | --- | -- | -- |
-| 0 | read | 0 | unsigned int fd | char *buf | size_t count | - | - | - |
-| 1 | write | 1 | unsigned int fd | const char *buf | size_t count | - | - | - |
-| 60 | exit | 60 | int error_code | - | - | - | - | - |
-
-## Argument register overview
-
-| Argument type | Registers |
-| ------------- | --------- |
-| Integer/pointer arguments 1-6 | RDI, RSI, RDX, RCX, R8, R9  |
-| Floating point arguments 1-8  | XMM0 - XMM7 |
-| Excess arguments | Stack |
-| Static chain pointer  | R10 |
-
-## Data Type Sizes
-
-| C type | Processor type | GAS suffix | x86-64 Size (Bytes) |
-| ------ | -------------- | ---------- | ------------------- |
-| char | Byte | b | 1 |
-| short | Word | w | 2 |
-| int | Double Word | l | 4 |
-| unsigned | Double word | l | 4|
-| long int | Quad word | q | 8 |
-| unsigned long | Quad word | q | 8 |
-| char * | Quad word | q | 8 |
-| float | Single precision | s | 4 |
-| double | Double precision | d | 8 |
-| long double | Extended precision | t | 16 |
+* All assembly programs have the following sections:
+  * ```.data``` - Where all data is defined before compilation
+  * ```.bss``` - Where data is allocated for future use
+  * ```.text``` - Main program
 
 ## Using ```objdump``` to view executable instructions
 
