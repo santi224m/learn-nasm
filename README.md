@@ -18,6 +18,7 @@ This repository will record my learning to write x86 assembly language using NAS
 1. [System Calls](#system-calls)
     - [File Descriptors (fd)](#file-descriptors-fd)
     - [Common syscalls](#common-syscalls)
+1. [Memory Operands](#memory-operands)
 1. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
 
 ## Installing NASM
@@ -172,7 +173,7 @@ R0 -- RAX
 R1 -- RCX
 R2 -- RDX
 R3 -- RBX
-R4 -- RSP
+R4 -- RSP   <-- Stack pointer
 R5 -- RBP
 R6 -- RSI
 R7 -- RDI
@@ -320,6 +321,15 @@ XMM15
 | 0 | read | 0 | unsigned int fd | char *buf | size_t count | - | - | - |
 | 1 | write | 1 | unsigned int fd | const char *buf | size_t count | - | - | - |
 | 60 | exit | 60 | int error_code | - | - | - | - | - |
+
+## Argument register overview
+
+| Argument type | Registers |
+| ------------- | --------- |
+| Integer/pointer arguments 1-6 | RDI, RSI, RDX, RCX, R8, R9  |
+| Floating point arguments 1-8  | XMM0 - XMM7 |
+| Excess arguments | Stack |
+| Static chain pointer  | R10 |
 
 ## Using ```objdump``` to view executable instructions
 
