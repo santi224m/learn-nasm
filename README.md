@@ -1,6 +1,10 @@
-# Learning Assembly with NASM
+# Learning x86-64 Assembly with NASM
 
 This repository will record my learning to write x86 assembly language using NASM.
+
+I will try to document all the resources I use so that anyone can follow along.
+
+I should note that I have completed a college course in computer architecture, where I learned the basics of the 32-bit x86 instruction set.
 
 **OS**: Debian GNU/Linux bookworm 12.5 x86_64
 
@@ -8,8 +12,9 @@ This repository will record my learning to write x86 assembly language using NAS
 
 # Table of Contents
 
-1. [Installing NASM](#installing-nasm)
 1. [Resources](#resources)
+1. [What is x86-64](#what-is-x86-64)
+1. [Installing NASM](#installing-nasm)
 1. [Assembling Programs](#assembling-programs)
 1. [NASM Program Structure](#nasm-program-structure)
 1. [Sections](#sections)
@@ -21,25 +26,38 @@ This repository will record my learning to write x86 assembly language using NAS
 1. [Data Type Sizes](#data-type-sizes)
 1. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
 
-## Installing NASM
-
-```bash
-sudo apt install nasm
-```
-
 ## Resources
 
 [NASM Docs](https://www.nasm.us/doc/)
 
 [AMD64 Architecture Programmer’s Manual Volumes 1-5](https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/40332.pdf)
 
+[Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit)
+
 [NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
 
 [ x86_64 Linux Assembly YouTube Playlist](https://youtube.com/playlist?list=PLetF-YjXm-sCH6FrTz4AQhfH6INDQvQSn&si=toV9gOHZ-j73TPxk)
 
-[Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit)
+[x86-64 Machine-Level Programming Paper](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f09/www/misc/asm64-handout.pdf)
 
-[x86-64 Machine-Level Programming](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f09/www/misc/asm64-handout.pdf)
+[x86-64-ABI PDF](https://gitlab.com/x86-psABIs/x86-64-ABI)
+
+## What is x86-64
+
+* the dominant instruction format
+* 64-bit version of the Intel instruction set
+* maintains full backward compatibility with IA32
+* developed by AMD
+* supported by AMD (AMD64) and Intel (Intel64)
+* Sometimes referred to as x64
+* 16 general-purpose registers
+
+## Installing NASM
+
+```bash
+sudo apt install nasm
+```
+
 
 ## Assembling Programs
 
@@ -168,101 +186,24 @@ Each line in a program can be made of the following:
 
 ### 16 integer registers (64 bits wide)
 
-Full 64 bits
-
-```txt
-R0 -- RAX
-R1 -- RCX
-R2 -- RDX
-R3 -- RBX
-R4 -- RSP   <-- Stack pointer
-R5 -- RBP
-R6 -- RSI
-R7 -- RDI
-R8
-R9
-R10
-R11
-R12
-R13
-R14
-R15
-```
-
-Lowest 32-bits
-
-```txt
-R0D -- EAX
-R1D -- ECX
-R2D -- EDX
-R3D -- EBX
-R4D -- ESP
-R5D -- EBP
-R6D -- ESI
-R7D -- EDI
-R8D
-R9D
-R10D
-R11D
-R12D
-R13D
-R14D
-R15D
-```
-
-Lowest 16-bits
-
-```txt
-R0W -- AX
-R1W -- CX
-R2W -- DX
-R3W -- BX
-R4W -- SP
-R5W -- BP
-R6W -- SI
-R7W -- DI
-R8W
-R9W
-R10W
-R11W
-R12W
-R13W
-R14W
-R15W
-```
-
-Lowest 8-bits
-
-```txt
-R0B -- AL
-R1B -- CL
-R2B -- DL
-R3B -- BL
-R4B -- SPL
-R5B -- BPL
-R6B -- SIL
-R7B -- DIL
-R8B
-R9B
-R10B
-R11B
-R12B
-R13B
-R14B
-R15B
-```
-
-bits 15 through 8 (high order bits) of R0..R3
-
-```txt
-AH
-BH
-CH
-DH
-```
-
-![Integer Registers](./assets/x86_integer_registers.png)
-
+| Full 64 bits | Lowest 32-bits | Lowest 16-bits | Highest 8-bits | Lowest 8-bits | Notes |
+| ------------ | -------------- | -------------- | -------------- | ------------- | ----- |
+| rax | eax | ax | ah | al | Return value |
+| rbx | ebx | bx | bh | bl | Callee saved |
+| rcx | ecx | cx | ch | cl | 4th argument |
+| rdx | edx | dx | dh | dl | 3rd argument |
+| rsi | esi | si | | sil | 2nd argument |
+| rdi | edi | di | | dil | 1st argument |
+| rbp | ebp | bp | | bpl | Callee saved |
+| rsp | esp | sp | | spl | Stack pointer |
+| r8 | r8d | r8w | | r8b | 5th argument |
+| r9 | r9d | r9w | | r9b | 6th argument |
+| r10 | r10d |  r10w | | r10b | Callee saved |
+| r11 | r11d | r11w | | r11b | Used for linking |
+| r12 | r12d | r12w | | r12b | Unused for C |
+| r13 | r13d | r13w | | r13b | Callee saved |
+| r14 | r14d | r14w | | r14b | Callee saved |
+| r15 | r15d | r15w | | r15b | Callee saved |
 
 ### 16 XMM registers (128 bits wide)
 
@@ -284,8 +225,6 @@ XMM13
 XMM14
 XMM15
 ```
-
-![XMM Registers](./assets/x86_XMM_registers.png)
 
 ## System Calls
 
