@@ -33,6 +33,7 @@ I should note that I have completed a college course in computer architecture, w
 1. [NASM Program Structure](#nasm-program-structure)
 1. [Sections](#sections)
 1. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
+1. [Debugging with ```gdb```](#debugging-with-gdb)
 
 ## Resources
 
