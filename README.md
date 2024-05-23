@@ -34,6 +34,7 @@ I should note that I have completed a college course in computer architecture, w
 1. [Sections](#sections)
 1. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
 1. [Debugging with ```gdb```](#debugging-with-gdb)
+    - [Print integer value of a label](#print-integer-value-of-a-label)
 
 ## Resources
 
@@ -530,4 +531,23 @@ Breakpoint 2, _start () at menu.asm:41
 (gdb) info registers rax
 rax            0x1                 1
 (gdb)
+```
+
+### Print integer value of a label
+
+Integer ```x``` set to ```5``` using ```dd``` pseudo-instruction
+
+```bash
+        section .data
+x:      dd      5
+```
+
+In ```gdb```:
+
+```bash
+(gdb) info address x
+Symbol "x" is at 0x402000 in a file compiled without debugging.
+(gdb) x/d 0x402000
+0x402000 <x>:	5
+
 ```
