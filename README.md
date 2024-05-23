@@ -50,6 +50,8 @@ I should note that I have completed a college course in computer architecture, w
 
 [x86-64-ABI PDF](https://gitlab.com/x86-psABIs/x86-64-ABI)
 
+[Using FPU registers for floating point calculations](https://gist.github.com/nikAizuddin/0e307cac142792dcdeba)
+
 ## What is x86-64
 
 * the dominant instruction format
@@ -282,6 +284,15 @@ Perform jumps based on the state of the flags.
 | Excess arguments | Stack |
 | Static chain pointer  | R10 |
 
+## What is NASM
+
+```NASM``` - The Netwide Assembler
+
+* An 80x86 and x86-64 assembler designed for portability and modularity
+* Syntax is designed to be simple and easy to understand
+* Supports all currently known x86 architectural extensions
+* 2-clause BSD license
+
 ## Installing NASM
 
 ```bash
@@ -370,6 +381,10 @@ Each line in a program can be made of the following:
   * Label
   * Instruction
   * Operands
+
+  ```txt
+label:    instruction operands        ; comment
+```
 
 ## Sections
 
