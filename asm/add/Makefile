@@ -1,7 +1,7 @@
-all: add.out
+all: a.out
 
-add.o:	add.asm
-	nasm -felf64 add.asm
+addition.o:	addition.asm
+	nasm -f elf64 -g addition.asm
 
-add.out:	add.o
-	gcc -no-pie add.o -o add.out
+a.out:	addition.o
+	ld addition.o
