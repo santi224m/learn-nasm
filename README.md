@@ -17,7 +17,13 @@ I should note that I have completed a college course in computer architecture, w
 1. [Data Type Sizes](#data-type-sizes)
 1. [GAS Suffixes](#gas-suffixes)
 1. [Instructions](#instructions)
-1. [NASM Pseudo-Instructions](#nasm-pseudo-instructions)
+    - [Data movement instructions](#data-movement-instructions)
+    - [Arithmetic and Logic Instructions](#arithmetic-and-logic-instructions)
+    - [Shift and Rotate Instructions](#shift-and-rotate-instructions)
+    - [Control Flow Instructions](#control-flow-instructions)
+    - [Comparison Instructions](#comparison-instructions)
+    - [Conditional Jump Instructions](#conditional-jump-instructions)
+    - [NASM Pseudo-Instructions](#nasm-pseudo-instructions)
 1. [Registers](#registers)
 1. [System Calls](#system-calls)
     - [File Descriptors (fd)](#file-descriptors-fd)
@@ -90,19 +96,83 @@ I should note that I have completed a college course in computer architecture, w
 
 ## Instructions
 
-| Instruction | Description | Purpose | Example |
-| ----------- | ----------- | ------- | ------- |
-| mov | mov op, op | Moves data from the source operand to the destination operand. | mov eax, ebx |
+* brackets ```[ ]``` indicate a memory address
+
+### Data movement instructions
+
+Primarily used for transferring data between registers, memory, and stack.
+
+| Instruction | Syntax | Description | Example |
+| ----------- | ------ | ----------- | ------- |
+| mov | mov dest, src | Moves data from the source operand to the destination operand. | mov eax, ebx |
+| movsx | movsx dest, src | Moves a byte or word from the source to the destination and sign-extends it to a larger size. | movsx rax, al |
+| movzx | movzx dest, src | Moves a byte or word from the source to the destination and zero-extends it to a larger size. | movzx rax, al |
+| movsxd | movsxd dest, src | Moves a double word from the source to the destination and sign-extends it to a quad word. | movsxd rax, eax |
+| lea | lea D, [S] | Load effective address of S into D. | lea rdx, [rax] |
+
+### Arithmetic and Logic Instructions
+
+Perform arithmetic and bitwise operations.
+
+| Instruction | Syntax | Description | Example |
+| ----------- | ------ | ----------- | ------- |
+| add | add op, op | Adds the second operand to the first. | add eax, ebx |
+| sub | sub op, op | Subtracts the second operand from the first. | sub eax, ebx |
+| imul | imul D, S | Multiplies D by S, storing result in D. | imul rdx, rax |
+| idiv | idiv op | Divides the accumulator (AX, EAX, or RAX) by the operand, storing the quotient in the accumulator and the remainder in DX, EDX, or RDX. | idiv ebx |
+| inc | inc op | Increments the operand by 1. | inc eax |
+| dec | dec op | Decrements the operand by 1. | dec eax |
+| neg | neg D | Negates D. | neg rax |
+| not | not D | Computes the bitwise complement of D. | not rax |
 | and | and op, op | Performs a bitwise AND on the operands. | and eax, ebx |
 | or | or op, op | Performs a bitwise OR on the operands. | or eax, ebx |
 | xor | xor op, op | Performs a bitwise XOR on the operands. | xor eax, ebx |
-| add | add op, op | Adds the second operand to the first. | add eax, ebx |
-| sub | sub op, op | Subtracts the second operand from the first. | sub eax, ebx |
-| inc | inc op | Increments the operand by 1. | inc eax |
-| dec | dec op | Decrements the operand by 1. | dec eax |
-| syscall | syscall | Triggers a system call handled by the OS kernel. | syscall |
 
-## NASM Pseudo-Instructions
+### Shift and Rotate Instructions
+
+Manipulate bits by shifting or rotating them.
+
+| Instruction | Syntax | Description | Example |
+| ----------- | ------ | ----------- | ------- |
+| sal | sal D, k | Performs left shift on D by k bits. (Same as shl) | sal rax, 2 |
+| shl | shl D, k | Performs left shift on D by k bits. | shl rax, 2 |
+| sar | sar D, k | Performs arithmetic right shift on D by k bits. | sar rax, 2 |
+| shr | shr D, k | Performs logical right shift on D by k bits. | shr rax, 2 |
+
+### Control Flow Instructions
+
+Used for system-level operations and stack management.
+
+| Instruction | Syntax | Description | Example |
+| ----------- | ------ | ----------- | ------- |
+| syscall | syscall | Triggers a system call handled by the OS kernel. | syscall |
+| push | push src | Pushes the operand onto the stack. | push rax |
+| pop | pop dest | Pops the top of the stack into the destination. | pop rax |
+
+### Comparison Instructions
+
+Set the flags in the FLAGS register based on the result of the comparison. 
+
+| Instruction | Syntax | Description | Example |
+| ----------- | ------ | ----------- | ------- |
+| cmp | cmp op1, op2 | Compares two operands by subtracting op2 from op1. | cmp eax, ebx |
+| test | test op1, op2 | Logically ANDs two operands and sets the flags. | test eax, eax |
+
+### Conditional Jump Instructions
+
+Perform jumps based on the state of the flags.
+
+| Instruction | Syntax | Description | Example |
+| ----------- | ------ | ----------- | ------- |
+| je | je label | Jump if equal (zero flag set). | je equal_label |
+| jne | jne label | Jump if not equal (zero flag clear). | jne notequal_label |
+| jg | jg label | Jump if greater (signed). | jg greater_label |
+| jge | jge label | Jump if greater or equal (signed). | jge greatereq_label |
+| jl | jl label | Jump if less (signed). | jl less_label |
+| jle | jle label | Jump if less or equal (signed). | jle lesseq_label |
+
+
+### NASM Pseudo-Instructions
 
 > Pseudo-instructions are things which, though not real x86 machine instructions, are used in the instruction field anyway because that's the most convenient place to put them. [(NASM Docs)](https://www.nasm.us/doc/nasmdoc3.html#section-3.2)
 
