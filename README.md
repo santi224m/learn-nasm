@@ -478,3 +478,55 @@ disassemblerrbp
 
 // Rest of output
 ```
+
+## Debugging with ```gdb```
+
+Add ```-g``` when assembling code to include symbols in executable
+
+```bash
+nasm -f elf64 -g filename.asm
+```
+
+* Start gdb with ```gdb```
+* Enable ```tui``` to see code along with gdb debugger
+* Use ```info registers``` to print registers
+  * ```info registers rax``` to print a specific register (replace rax with register)
+
+```bash
+GNU gdb (Debian 13.1-3) 13.1
+Copyright (C) 2023 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word".
+(gdb) file a.out
+Reading symbols from a.out...
+(gdb) break 40
+Breakpoint 1 at 0x401000: file menu.asm, line 40.
+(gdb) run
+Starting program: /home/santissj/Github/learn-nasm/asm/menu/a.out 
+
+Breakpoint 1, _start () at menu.asm:40
+40			mov	rax, 1
+(gdb) info registers rax
+rax            0x0                 0
+(gdb) break 41
+Breakpoint 2 at 0x401005: file menu.asm, line 41.
+(gdb) c
+Continuing.
+
+Breakpoint 2, _start () at menu.asm:41
+41			mov	rdi, 1
+(gdb) info registers rax
+rax            0x1                 1
+(gdb)
+```
