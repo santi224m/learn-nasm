@@ -13,7 +13,7 @@ _start:	; Prompt user for name
 	mov rdx, 17
 	syscall
 
-	; Get name from user
+	; Get name from user (15 chars max)
 	mov rax, 0
 	mov rdi, 0
 	mov rsi, name

@@ -11,6 +11,7 @@ _start:
 	mov	r14d, [y]
 	add	r13d, r14d
 
+	; Exit successfully
 	mov	rax, 60
 	mov	rdi, 0
 	syscall
