@@ -28,6 +28,7 @@ I should note that I have completed a college course in computer architecture, w
 1. [System Calls](#system-calls)
     - [File Descriptors (fd)](#file-descriptors-fd)
     - [Common syscalls](#common-syscalls)
+1. [What is NASM](#what-is-nasm)
 1. [Installing NASM](#installing-nasm)
 1. [Assembling Programs](#assembling-programs)
 1. [NASM Program Structure](#nasm-program-structure)
@@ -38,7 +39,7 @@ I should note that I have completed a college course in computer architecture, w
 
 ## Resources
 
-[86-64 Assembly Language Programming with Ubuntu](http://www.egr.unlv.edu/~ed/assembly64.pdf)
+[x86-64 Assembly Language Programming with Ubuntu](http://www.egr.unlv.edu/~ed/assembly64.pdf)
 
 [NASM Docs](https://www.nasm.us/doc/)
 
@@ -47,6 +48,8 @@ I should note that I have completed a college course in computer architecture, w
 [Linux System Call Table](https://www.chromium.org/chromium-os/developer-library/reference/linux-constants/syscalls/#x86_64-64-bit)
 
 [NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
+
+[Endianness Explained](https://youtu.be/LxvFb63OOs8?si=wuDV4ffZSnP5MO8F)
 
 [ x86_64 Linux Assembly YouTube Playlist](https://youtube.com/playlist?list=PLetF-YjXm-sCH6FrTz4AQhfH6INDQvQSn&si=toV9gOHZ-j73TPxk)
 
@@ -189,6 +192,8 @@ Perform jumps based on the state of the flags.
 
 > Pseudo-instructions are things which, though not real x86 machine instructions, are used in the instruction field anyway because that's the most convenient place to put them. [(NASM Docs)](https://www.nasm.us/doc/nasmdoc3.html#section-3.2)
 
+### ```.data``` section
+
 | Instruction | Syntax | Description | Example |
 | ----------- | ------ | ----------- | ------- |
 | db | db value[, ...] | Defines one or more bytes. | db 'hello', 0x55 |
@@ -196,6 +201,25 @@ Perform jumps based on the state of the flags.
 | dd | dd value[, ...] | Defines one or more double word (4 bytes). | dd 0x12345678, 1.234567e20 |
 | dq | dq value[, ...] | Defines one or more quad word (8 bytes). | dq 0x123456789abcdef0, 1.234567e20 |
 | dt | dt value[, ...] | Defines one ten-byte floating point number. | dt 1.234567e20 |
+
+### ```.bss``` section
+
+| Instruction | Reservation Size |
+| ----------- | ---------------- |
+| resb | 8-bit variable(s) |
+| resw | 16-bit variable(s) |
+| resd | 32-bit variable(s) |
+| resq | 64-bit variable(s) |
+| resdq | 128-bit variable(s) |
+
+**Examples**
+
+| Label | instruction | Element Qty | Comment |
+| ----- | ----------- | ----------- | ------- |
+| bArr | resb | 10 | ; 10 element byte array |
+| wArr | resw | 50 | ; 50 element word array |
+| dArr | resd | 100 | ; 100 element double array |
+| qArr | resq | 200 | ; 200 element quad array |
 
 ## Registers
 
@@ -327,7 +351,9 @@ Perform jumps based on the state of the flags.
 
 ```NASM``` - The Netwide Assembler
 
-* An 80x86 and x86-64 assembler designed for portability and modularity
+* An x86 and x86_64 assembler
+  * reads an assembly language input file and converts the code into a machine language binary file (object file)
+  * variable names and labels are converted into appropriate addresses
 * Syntax is designed to be simple and easy to understand
 * Supports all currently known x86 architectural extensions
 * 2-clause BSD license
@@ -391,13 +417,25 @@ _start:	; Prompt user for name
 
 ```bash
 nasm -f elf64 print_hello.asm
-ld print_hello.o -o print_hello
+ld -g print_hello.o -o print_hello
 ./print_hello
 ```
 
 * ```-f elf64``` - format the object code file in ***elf64*** format  (ELF64 (x86-64) (Linux, most Unix variants))
 
 * ```ld``` - The GNU linker
+  * combines one or more object files into a single executable file
+
+To link more than one object file into one executable:
+  * functions not in the current source file must be declared as ```extern```
+  * global variables can be accessed using ```extern```
+
+```bash
+ld -g -o example main.o funcs.o
+```
+
+Use ```-l FILENAME.lst``` to genearate a list file
+  * can be useful for debugging
 
 ### Assembling with nasm and gcc
 
@@ -414,25 +452,36 @@ gcc -no-pie print_hello.o -o print_hello
 
 Programs are made of two types of sections:
   * Directives
+    * instructions to the assembler
+    * not translated into instructions for the CPU
+    * Ex: ```global``` directive makes symbols public, allowing them to be visible to the linker and other modules
   * Sections
+    * ```.data``` section
+    * ```.bss``` section
+    * ```.text``` section
 
 Each line in a program can be made of the following:
   * Label
   * Instruction
   * Operands
 
-  ```txt
+```txt
 label:    instruction operands        ; comment
 ```
 
 ## Sections
 
 * All assembly programs have the following sections:
-  * ```.data``` - Where all data is defined before compilation
-  * ```.bss``` - Where data is allocated for future use
+  * ```.data``` - initialized data is declared and defined
+  * ```.bss``` - uninitialized data is declared
   * ```.text``` - Main program
 
 ## Using ```objdump``` to view executable instructions
+
+* assembler converts each assembly language instruction into a set of 1's and 0's that the CPU knows to be that instruction
+* one-to-one correspondence between assembly language instructions and binary machine language
+* means executable file can be converted back into human readable assembly language
+  * missing comments, variable names, and label names
 
 You can use the ```objdump``` disassembler command to view the assembly instructions in an object file.
 
@@ -588,3 +637,22 @@ Symbol "x" is at 0x402000 in a file compiled without debugging.
 0x402000 <x>:	5
 
 ```
+
+| Command | Description |
+| ------- | ----------- |
+| x/\<n>\<f>\<u> $\<register> | Examine contents of the stack. |
+| x/\<n>\<f>\<u> &\<variable> | Examine memory location of \<variable> |
+
+* ```n``` - Number of locations (1 is default)
+* ```f``` - Format
+  * ```d``` - decimal (signed)
+  * ```x``` - hex
+  * ```u``` - decimal (unsigned)
+  * ```c``` - character
+  * ```s``` - string
+  * ```f``` - floating-point
+* ```u``` - Unit size
+  * ```b``` - byte (8 bits)
+  * ```h``` - halfword (16 bits)
+  * ```w``` - word (32 bits)
+  * ```g``` - giant (64 bits)
