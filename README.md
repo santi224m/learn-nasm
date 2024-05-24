@@ -54,6 +54,10 @@ I should note that I have completed a college course in computer architecture, w
 
 [Using FPU registers for floating point calculations](https://gist.github.com/nikAizuddin/0e307cac142792dcdeba)
 
+[86-64 Assembly Language Programming with Ubuntu](http://www.egr.unlv.edu/~ed/assembly64.pdf)
+
+[NASM Forum](https://forum.nasm.us/index.php?board=2.0)
+
 ## What is x86-64
 
 * the dominant instruction format
