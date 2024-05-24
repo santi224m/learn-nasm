@@ -205,7 +205,7 @@ Perform jumps based on the state of the flags.
   * [Program counter](https://en.wikipedia.org/wiki/Program_counter) is a register that indicates where a computer is in its program sequence
   * points to next instruction to be executed
 
-![Registers Table](./assets/Table_of_x86_Registers_svg.svg)
+![Registers Table](./img/Table_of_x86_Registers_svg.svg)
 
 ### 16 integer registers (64 bits wide)
 
