@@ -38,6 +38,8 @@ I should note that I have completed a college course in computer architecture, w
 
 ## Resources
 
+[86-64 Assembly Language Programming with Ubuntu](http://www.egr.unlv.edu/~ed/assembly64.pdf)
+
 [NASM Docs](https://www.nasm.us/doc/)
 
 [AMD64 Architecture Programmer’s Manual Volumes 1-5](https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/40332.pdf)
@@ -54,8 +56,6 @@ I should note that I have completed a college course in computer architecture, w
 
 [Using FPU registers for floating point calculations](https://gist.github.com/nikAizuddin/0e307cac142792dcdeba)
 
-[86-64 Assembly Language Programming with Ubuntu](http://www.egr.unlv.edu/~ed/assembly64.pdf)
-
 [NASM Forum](https://forum.nasm.us/index.php?board=2.0)
 
 ## What is x86-64
@@ -66,6 +66,11 @@ I should note that I have completed a college course in computer architecture, w
 * developed by AMD
 * supported by AMD (AMD64) and Intel (Intel64)
 * Sometimes referred to as x64
+* Complex Instruction Set Computing (CISC) CPU design
+  * include wide variety of instructions
+  * varying instructions sizes
+  * wide range of addressing modes
+  * in contrast to Reduced Instruction Set Computer (RISC)
 * 16 general-purpose registers
 
 ## Data Type Sizes
@@ -194,15 +199,21 @@ Perform jumps based on the state of the flags.
 
 ## Registers
 
+* ```register``` - a temporary storage or working location built into the CPU
+* Computations are typically performed by the CPU using registers
+* Program counter is named ```rip```
+  * [Program counter](https://en.wikipedia.org/wiki/Program_counter) is a register that indicates where a computer is in its program sequence
+  * points to next instruction to be executed
+
 ![Registers Table](./assets/Table_of_x86_Registers_svg.svg)
 
 ### 16 integer registers (64 bits wide)
 
-* Register ```rsp``` holds a pointer to the top stack element
-* No stack frame in x86_64; ```rbp``` is general purpose register
-  * ```ebp``` was stack frame in x86
-* Program counter is named ```rip```
-  * [Program counter](https://en.wikipedia.org/wiki/Program_counter) is a register that indicates where a computer is in its program sequence
+* ```rsp``` holds a pointer to the top stack element
+  * should not be used for data or other uses
+* ```rbp``` is used as a base pointer during function calls
+  * should not be used for data or other uses  
+* when the lower bit portion of a 64-bit register is set, the upper bits are unaffected
 
 | Full 64 bits | Lowest 32-bits | Lowest 16-bits | Highest 8-bits | Lowest 8-bits | Notes |
 | ------------ | -------------- | -------------- | -------------- | ------------- | ----- |
@@ -225,6 +236,12 @@ Perform jumps based on the state of the flags.
 
 ### 16 XMM registers (128 bits wide)
 
+* used to support 64-bit and 32-bit floating-point operations and Single Instruction Multiple Data (SIMD) instructions
+* SIMD instructions allow a single instruction to be applied simultaneously to multiple data items
+  * significant performance increase
+
+* more recent X86-64 processors support 256-bit XMM registers
+
 | 128 bits |
 | -------- |
 | XMM0 |
@@ -243,6 +260,22 @@ Perform jumps based on the state of the flags.
 | XMM13 |
 | XMM14 |
 | XMM15 |
+
+### Flags Register
+
+* ```rFlags``` is used for status and CPU control information
+  * updated by the CPU after each instruction
+  * not directly accessible by programs
+
+| Name | Symbol | Bit | Use |
+| ---- | ------ | --- | --- |
+| Carry | CF | 0 | indicate if the previous operation resulted in a carry |
+| Parity | PF | 2 | indicate if the last byte has an even number of 1's |
+| Adjust | AF | 4 | support Binary Coded Decimal operations |
+| Zero | ZF | 6 | indicate if the previous operation resulted in a zero result |
+| Sign | SF | 7 | indicate if the result of the previous operation resulted in a 1 in the most significant bit (indicating negative in the context of signed data) |
+| Direction | DF | 10 | specify the direction (increment or decrement) for some string operations |
+| Overflow | OF | 11 | indicate if the previous operation resulted in an overflow |
 
 ## System Calls
 
