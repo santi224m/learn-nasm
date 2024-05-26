@@ -33,14 +33,13 @@ sandwich_count:	resd	1
 
 		section	.text
 		global	_start
+		extern	print_msg
 
 _start:
 		; Print drink msg
-		mov	rax, 1
-		mov	rdi, 1
-		mov	rsi, drink_msg
-		mov	edx, [drink_msg_len]
-		syscall
+		mov	rdi, drink_msg
+		mov	esi, [drink_msg_len]
+		call	print_msg
 
 		; Store ascii value of drink_price in char
 		mov	r13, [drink_price]
@@ -64,11 +63,9 @@ _start:
 		syscall
 
 		; Print sandwich msg
-		mov	rax, 1
-		mov	rdi, 1
-		mov	rsi, sandwich_msg
-		mov	edx, [sandwich_msg_len]
-		syscall
+		mov	rdi, sandwich_msg
+		mov	esi, [sandwich_msg_len]
+		call	print_msg
 
 		; Print sandwich price
 		mov	rax, 1
@@ -90,11 +87,9 @@ _start:
 		syscall
 
 		; Prompt user for drinks
-		mov	rax, 1
-		mov	rdi, 1
-		mov	rsi, prompt_drinks
-		mov	edx, [prompt_drinks_len]
-		syscall
+		mov	rdi, prompt_drinks
+		mov	esi, [prompt_drinks_len]
+		call	print_msg
 
 		; Take in user input for drinks count
 		mov	rax, 0
@@ -145,12 +140,11 @@ _start:
 		syscall
 
 		; Print drink total
-		mov	rax, 1
-		mov	rdi, 1
-		mov	rsi, drink_total_msg
-		mov	edx, [drink_total_msg_len]
-		syscall
+		mov	rdi, drink_total_msg
+		mov	esi, [drink_total_msg_len]
+		call	print_msg
 
+		; Print drink total
 		mov	rax, 1
 		mov	rdi, 1
 		mov	r13d, [drink_total]
