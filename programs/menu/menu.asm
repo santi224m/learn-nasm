@@ -6,9 +6,6 @@ drink_total:	dd	4
 sandwich_total:	dd	4
 total_price:	dd	4
 
-drink_count:	db	4
-sandwich_count:	db	4
-
 drink_msg:	db	'Drinks ..... $'
 drink_msg_len:	dd	14
 sandwich_msg:	db	'Sandwiches ..... $'
@@ -31,6 +28,8 @@ drink_total_msg_len:
 		section	.bss
 char:		resb	1	; Reserve 1 byte to print ascii char for price
 count:		resb	4
+drink_count:	resd	1
+sandwich_count:	resd	1
 
 		section	.text
 		global	_start
@@ -100,14 +99,15 @@ _start:
 		; Take in user input for drinks count
 		mov	rax, 0
 		mov	rdi, 0
-		mov	rsi, drink_count
+		mov	esi, drink_count
 		mov	rdx, 4
 		syscall
 
 		; Remove 48 from user input to remove ascii offset
-		mov	r13, [drink_count]
-		sub	r13, 48
-		mov	[drink_count], r13
+		mov	r13d, [drink_count]
+		movzx	r13d, r13b			; Get first char only (not newline)
+		sub	r13d, 48
+		mov	[drink_count], r13d
 
 		; Prompt user for sandwiches
 		mov	rax, 1
@@ -124,15 +124,16 @@ _start:
 		syscall
 
 		; Remove ascii offset from sandwich count
-		mov	r13, [sandwich_count]
+		mov	r13d, [sandwich_count]
+		movzx	r13d, r13b
 		sub	r13, 48
 		mov	[sandwich_count], r13
 
 		; Calculate drink total
-		mov	r13, [drink_count]
-		mov	r14, 5
-		imul	r13, r14
-		mov	[drink_total], r13
+		mov	r13d, [drink_count]
+		mov	r14d, [drink_price]
+		imul	r13d, r14d
+		mov	[drink_total], r13d
 
 		; Print newline
 		mov	rax, 1
@@ -152,9 +153,9 @@ _start:
 
 		mov	rax, 1
 		mov	rdi, 1
-		mov	r13, [drink_total]
-		add	r13, 0x30
-		mov 	[char], r13
+		mov	r13d, [drink_total]
+		add	r13d, 0x30
+		mov 	[char], r13d
 		mov	rsi, char
 		mov	rdx, 1
 		syscall
