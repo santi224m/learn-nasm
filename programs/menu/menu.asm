@@ -34,6 +34,7 @@ sandwich_count:	resd	1
 		section	.text
 		global	_start
 		extern	print_msg
+		extern print_int
 
 _start:
 		; Print drink msg
@@ -144,15 +145,8 @@ _start:
 		mov	esi, [drink_total_msg_len]
 		call	print_msg
 
-		; Print drink total
-		mov	rax, 1
-		mov	rdi, 1
-		mov	r13d, [drink_total]
-		add	r13d, 0x30
-		mov 	[char], r13d
-		mov	rsi, char
-		mov	rdx, 1
-		syscall
+		mov	rdi, [drink_total]
+		call	print_int
 
 		; Exit
 		mov	rax, 60
