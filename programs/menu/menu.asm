@@ -42,17 +42,8 @@ _start:
 		mov	esi, [drink_msg_len]
 		call	print_msg
 
-		; Store ascii value of drink_price in char
-		mov	r13, [drink_price]
-		add	r13, 0x30
-		mov	[char], r13
-
-		; Print drink price
-		mov	rax, 1
-		mov	rdi, 1
-		mov	rsi, char
-		mov	rdx, 1
-		syscall
+		mov	rdi, [drink_price]
+		call	print_int
 
 		; Print newline
 		mov	rax, 1
@@ -69,14 +60,8 @@ _start:
 		call	print_msg
 
 		; Print sandwich price
-		mov	rax, 1
-		mov	rdi, 1
-		mov	r13, [sandwich_price]
-		add	r13, 0x30
-		mov	[char], r13
-		mov	rsi, char
-		mov	rdx, 1
-		syscall
+		mov	rdi, [sandwich_price]
+		call	print_int
 
 		; Print newline
 		mov	rax, 1
@@ -126,10 +111,10 @@ _start:
 		mov	[sandwich_count], r13
 
 		; Calculate drink total
-		mov	r13d, [drink_count]
-		mov	r14d, [drink_price]
-		imul	r13d, r14d
-		mov	[drink_total], r13d
+		mov	r13, [drink_count]
+		mov	r14, [drink_price]
+		imul	r13, r14
+		mov	[drink_total], r13
 
 		; Print newline
 		mov	rax, 1

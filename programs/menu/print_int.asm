@@ -38,7 +38,7 @@ loop2init:	; Print each digit in the stack to the console
 
 loop2:
 	cmp	r15d, r14d	; Exit once all digits have been printed
-	Je printnl
+	Je return
 
 	; Get next digit in stack
 	pop	rax
@@ -55,15 +55,5 @@ loop2:
 	inc	r15d
 	Jmp loop2
 
-printnl:
-	; Print newline
-	mov	rax, 1
-	mov	rdi, 1
-	mov	rsi, nl
-	mov	rdx, 1
-	syscall
-
-	; Exit
-exit:	mov	rax, 60
-	mov	rdi, 0
-	syscall
+	; Return
+return:	ret
