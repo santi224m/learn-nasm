@@ -26,7 +26,6 @@ drink_total_msg_len:
 		dd	13
 
 		section	.bss
-char:		resb	1	; Reserve 1 byte to print ascii char for price
 count:		resb	4
 drink_count:	resd	1
 sandwich_count:	resd	1
@@ -34,7 +33,8 @@ sandwich_count:	resd	1
 		section	.text
 		global	_start
 		extern	print_msg
-		extern print_int
+		extern	print_int
+		extern	print_nl
 
 _start:
 		; Print drink msg
@@ -45,15 +45,6 @@ _start:
 		mov	rdi, [drink_price]
 		call	print_int
 
-		; Print newline
-		mov	rax, 1
-		mov	rdi, 1
-		mov	r13, 10
-		mov	[char], r13
-		mov	rsi, char
-		mov	rdx, 1
-		syscall
-
 		; Print sandwich msg
 		mov	rdi, sandwich_msg
 		mov	esi, [sandwich_msg_len]
@@ -62,15 +53,6 @@ _start:
 		; Print sandwich price
 		mov	rdi, [sandwich_price]
 		call	print_int
-
-		; Print newline
-		mov	rax, 1
-		mov	rdi, 1
-		mov	r13, 10
-		mov	[char], r13
-		mov	rsi, char
-		mov	rdx, 1
-		syscall
 
 		; Prompt user for drinks
 		mov	rdi, prompt_drinks
@@ -116,16 +98,8 @@ _start:
 		imul	r13, r14
 		mov	[drink_total], r13
 
-		; Print newline
-		mov	rax, 1
-		mov	rdi, 1
-		mov	r13, 10
-		mov	[char], r13
-		mov	rsi, char
-		mov	rdx, 1
-		syscall
-
 		; Print drink total
+		call	print_nl
 		mov	rdi, drink_total_msg
 		mov	esi, [drink_total_msg_len]
 		call	print_msg

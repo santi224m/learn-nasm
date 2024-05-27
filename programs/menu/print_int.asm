@@ -1,8 +1,5 @@
 ; Print integer to console
 
-	section	.data
-nl:	db	'', 10
-
 	section	.bss
 intchar:
 	resb	1
@@ -10,6 +7,7 @@ myint:	resd	1
 
 	section	.text
 	global	print_int
+	extern	print_nl
 
 print_int:
 	mov	[myint], rdi
@@ -55,5 +53,6 @@ loop2:
 	inc	r15d
 	Jmp loop2
 
-	; Return
-return:	ret
+return:
+	call	print_nl
+	ret
