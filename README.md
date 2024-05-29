@@ -33,6 +33,7 @@ I should note that I have completed a college course in computer architecture, w
 1. [Assembling Programs](#assembling-programs)
 1. [NASM Program Structure](#nasm-program-structure)
 1. [Sections](#sections)
+1. [Functions](#functions)
 1. [Using `objdump` to View Executable Instructions](#using-objdump-to-view-executable-instructions)
 1. [Debugging with ```gdb```](#debugging-with-gdb)
     - [Print integer value of a label](#print-integer-value-of-a-label)
@@ -479,6 +480,66 @@ label:    instruction operands        ; comment
   * ```.data``` - initialized data is declared and defined
   * ```.bss``` - uninitialized data is declared
   * ```.text``` - Main program
+
+## Functions
+
+* **Stack Dynamic Local Variables** - local variables are created by allocating space on the stack and assigning these stack locations to the variables
+  * If function with a large number of local variables is never called, the memory for the local variables is never allocated (helps overall performance of program)
+
+* **statically declared variables** - assigned memory locations for the entire execution of the program
+  * uses memory even if the associated function is not being executed
+  * no additional run-time overhead
+
+```asm
+  global <procName>
+<procName>:
+  ; function body
+  ret
+```
+
+* ```call``` - transfers control to the named function
+  * Saves address of what line to return to when function is complete
+  * Stores rip (instruction pointer) in stack (rsp)
+* ```ret``` - returns control back to the calling routine
+  * Pops top of stack (instruction to return to) to rip register
+* within the function the stack must not be corrupted
+  * any items pushed must be popped
+
+### Passing arguments to and/or from a function
+
+* Placing values in register
+* Globally defined 
+* Putting values and/or addresses on stack
+
+* **function prologue** - code at the beginning of a function
+  * helps save program state
+  * This includes storing [registers](#registers) whos value is preserved ("Callee saved") accross functions calls
+* **function epilogue** - code at the end of a function
+  * restores the program state
+
+### Parameter Passing
+
+* First six integer arguments are passed in [registers](#registers)
+  * additional arguments are passed on the stack
+
+* Arguments passed on the stack should be pushed in reverse order
+  * Stack is FIFO so you want first argument to be pushed last to pop it first
+
+* floating-point arguments are passed in registers **xmm0** to **xmm7**
+
+* when the function is completed, calling routine is responsible for clearing the arguments from the stack
+  * stack pointer, ```rsp```, is adjusted as necessary to clear arguments off the stack Using ```objdump``` to view executable instructions
+  * adding ```[(number of arguments) * 8]``` to the rsp
+
+* Values are returned in **A** register
+
+| Return Value Size | Register |
+| ----------------- | -------- |
+| byte | al |
+| word | ax |
+| double-word | eax |
+| quadword | rax |
+| floating-point | xmm0 |
 
 ## Using ```objdump``` to view executable instructions
 
