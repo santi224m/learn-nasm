@@ -20,7 +20,6 @@ loop:
 	Jmp	loop
 
 exit:
-	dec	rcx
 	mov	rax, rcx	; rcx stores str length at this point
 	; Restore r13
 	mov	r13, [rsp-0x40]

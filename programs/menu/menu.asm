@@ -2,24 +2,13 @@
 drink_price:	dd	5	; $5 drinks
 sandwich_price:	dd	8	; $8 sandwich
 
-drink_msg:	db	'Drinks ..... $'
-drink_msg_len:	dd	14
-sandwich_msg:	db	'Sandwiches ..... $'
-sandwich_msg_len:
-		dd	18
-
-prompt_drinks:	db	'How many drinks? '
-prompt_drinks_len:
-		dd	17
+drink_msg:	db	'Drinks ..... $', 0
+sandwich_msg:	db	'Sandwiches ..... $', 0
+prompt_drinks:	db	'How many drinks? ', 0
 prompt_sandwiches:
-		db	'How many sandwiches? '
-prompt_sandwiches_len:
-		dd	21
-
+		db	'How many sandwiches? ', 0
 drink_total_msg:
-		db	'Drink total: '
-drink_total_msg_len:
-		dd	13
+		db	'Drink total: ', 0
 
 		section	.bss
 drink_count:	resd	1
