@@ -38,21 +38,18 @@ total_price:	resd	1
 _start:
 		; Print drink menu option
 		mov	rdi, drink_msg
-		mov	esi, [drink_msg_len]
 		call	print_msg
 		mov	rdi, [drink_price]
 		call	print_int
 
 		; Print sandwich menu option
 		mov	rdi, sandwich_msg
-		mov	esi, [sandwich_msg_len]
 		call	print_msg
 		mov	rdi, [sandwich_price]
 		call	print_int
 
 		; Prompt user for drinks
 		mov	rdi, prompt_drinks
-		mov	esi, [prompt_drinks_len]
 		call	print_msg
 
 		; Take in user input for drinks count
@@ -69,11 +66,14 @@ _start:
 		mov	[drink_count], r13d
 
 		; Prompt user for sandwiches
-		mov	rax, 1
-		mov	rdi, 1
-		mov	rsi, prompt_sandwiches
-		mov	edx, [prompt_sandwiches_len]
-		syscall
+;		mov	rax, 1
+;		mov	rdi, 1
+;		mov	rsi, prompt_sandwiches
+;		mov	edx, [prompt_sandwiches_len]
+;		syscall
+
+		mov	rdi, prompt_sandwiches
+		call	print_msg
 
 		; Take in user input for sandwich count
 		mov	rax, 0
@@ -97,7 +97,6 @@ _start:
 		; Print drink total
 		call	print_nl
 		mov	rdi, drink_total_msg
-		mov	esi, [drink_total_msg_len]
 		call	print_msg
 
 		mov	rdi, [drink_total]

@@ -12,5 +12,8 @@ print_int.o:	print_int.asm
 print_nl.o:	print_nl.asm
 	nasm -f elf64 -g print_nl.asm
 
-a.out: menu.o print_msg.o print_int.o print_nl.o
-	ld menu.o print_msg.o print_int.o print_nl.o
+calc_str_length.o:	calc_str_length.asm
+	nasm -f elf64 -g calc_str_length.asm
+
+a.out: menu.o print_msg.o print_int.o print_nl.o calc_str_length.o
+	ld menu.o print_msg.o print_int.o print_nl.o calc_str_length.o
