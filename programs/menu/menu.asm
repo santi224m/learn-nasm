@@ -65,13 +65,6 @@ _start:
 		sub	r13d, 48
 		mov	[drink_count], r13d
 
-		; Prompt user for sandwiches
-;		mov	rax, 1
-;		mov	rdi, 1
-;		mov	rsi, prompt_sandwiches
-;		mov	edx, [prompt_sandwiches_len]
-;		syscall
-
 		mov	rdi, prompt_sandwiches
 		call	print_msg
 
