@@ -10,6 +10,12 @@ myint:	resd	1
 	extern	print_nl
 
 print_int:
+	; Preserve r15d
+	push	rbp
+	mov	rbp, rsp
+	sub	rsp, 0x20
+	mov	[rsp-0x20], r15d
+
 	mov	[myint], rdi
 	mov	rdx, 0
 	mov	r12d, 0		; Counter for numbers in stack
@@ -55,4 +61,8 @@ loop2:
 
 return:
 	call	print_nl
+	; Restore r15d
+	mov	r15d, [rsp-0x20]
+	add	rsp, 0x20
+	pop	rbp
 	ret

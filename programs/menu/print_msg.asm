@@ -6,6 +6,12 @@
 	extern calc_str_length
 
 print_msg:
+	; Preserve rbx
+	push	rbp
+	mov	rbp, rsp
+	sub	rsp, 0x40
+	mov	[rsp-0x40], rbx
+
 	mov	rbx, rdi	; Store string in rbx address
 
 	; Get str length
@@ -18,4 +24,8 @@ print_msg:
 	mov	rax, 1
 	mov	rdi, 1
 	syscall
+	; Restore rbx
+	mov	rbx, [rsp-0x40]
+	add	rsp, 0x40
+	pop	rbp
 	ret
