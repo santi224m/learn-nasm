@@ -207,6 +207,40 @@ Perform jumps based on the state of the flags.
 | dq | dq value[, ...] | Defines one or more quad word (8 bytes). | dq 0x123456789abcdef0, 1.234567e20 |
 | dt | dt value[, ...] | Defines one ten-byte floating point number. | dt 1.234567e20 |
 
+### Terminating strings
+
+* Must append ```0``` to terminate strings.
+
+Ex:
+
+Defining strings without terminating them
+
+```asm
+ str1:   db      'string 1'
+ str2:   db      'string 2'
+ str3:   db      'string 3'
+```
+
+Then when viewing ```str1``` in gdb, all strings where printed because there is no break between them (Did not terminate). 
+
+```bash
+0x402000 <str1>:	"string 1string 2string 3,"
+```
+
+Now when added ```0``` to terminate strings.
+
+```asm
+str1:   db      'string 1', 0
+str2:   db      'string 2', 0
+str3:   db      'string 3', 0
+```
+
+And when viewing in gdb
+
+```bash
+0x402000 <str1>:	"string 1"
+```
+
 ### ```.bss``` section
 
 | Instruction | Reservation Size |
