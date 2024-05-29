@@ -528,7 +528,7 @@ label:    instruction operands        ; comment
 * floating-point arguments are passed in registers **xmm0** to **xmm7**
 
 * when the function is completed, calling routine is responsible for clearing the arguments from the stack
-  * stack pointer, ```rsp```, is adjusted as necessary to clear arguments off the stack Using ```objdump``` to view executable instructions
+  * stack pointer, ```rsp```, is adjusted as necessary to clear arguments off the stack
   * adding ```[(number of arguments) * 8]``` to the rsp
 
 * Values are returned in **A** register
