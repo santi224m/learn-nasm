@@ -51,6 +51,10 @@ I should note that I have completed a college course in computer architecture, w
 
 [Endianness Explained](https://youtu.be/LxvFb63OOs8?si=wuDV4ffZSnP5MO8F)
 
+[Data Structure Alignment and Endianness](https://youtu.be/zyGMyV955Rw?si=qbDc-tK6VwQLfTId)
+
+[Stack Frame explanation](https://youtu.be/CRTR5ljBjPM?si=4p-Vg8xbww_M4FRP)
+
 [ x86_64 Linux Assembly YouTube Playlist](https://youtube.com/playlist?list=PLetF-YjXm-sCH6FrTz4AQhfH6INDQvQSn&si=toV9gOHZ-j73TPxk)
 
 [x86-64 Machine-Level Programming Paper](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f09/www/misc/asm64-handout.pdf)
