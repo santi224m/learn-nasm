@@ -2,10 +2,6 @@
 drink_price:	dd	5	; $5 drinks
 sandwich_price:	dd	8	; $8 sandwich
 
-drink_total:	dd	4
-sandwich_total:	dd	4
-total_price:	dd	4
-
 drink_msg:	db	'Drinks ..... $'
 drink_msg_len:	dd	14
 sandwich_msg:	db	'Sandwiches ..... $'
@@ -26,9 +22,12 @@ drink_total_msg_len:
 		dd	13
 
 		section	.bss
-count:		resb	4
 drink_count:	resd	1
 sandwich_count:	resd	1
+
+drink_total:	resd	1
+sandwich_total:	resd	1
+total_price:	resd	1
 
 		section	.text
 		global	_start
@@ -37,20 +36,17 @@ sandwich_count:	resd	1
 		extern	print_nl
 
 _start:
-		; Print drink msg
+		; Print drink menu option
 		mov	rdi, drink_msg
 		mov	esi, [drink_msg_len]
 		call	print_msg
-
 		mov	rdi, [drink_price]
 		call	print_int
 
-		; Print sandwich msg
+		; Print sandwich menu option
 		mov	rdi, sandwich_msg
 		mov	esi, [sandwich_msg_len]
 		call	print_msg
-
-		; Print sandwich price
 		mov	rdi, [sandwich_price]
 		call	print_int
 
