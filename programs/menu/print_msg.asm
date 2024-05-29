@@ -6,15 +6,15 @@
 	extern calc_str_length
 
 print_msg:
-	; Store string in r14 address
-	mov	r14, rdi
+	mov	rbx, rdi	; Store string in rbx address
 
 	; Get str length
 	call	calc_str_length
-	mov	rdx, rax
+	mov	rdx, rax	; Store string length as 3rd arg
 
-	mov	rsi, rdi	; Move msg to second arg for write syscall
+	mov	rsi, rbx	; Move msg to second arg for write syscall
 
+	; Call write system call
 	mov	rax, 1
 	mov	rdi, 1
 	syscall

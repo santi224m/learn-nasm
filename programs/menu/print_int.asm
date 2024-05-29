@@ -12,7 +12,7 @@ myint:	resd	1
 print_int:
 	mov	[myint], rdi
 	mov	rdx, 0
-	mov	r14d, 0		; Counter for numbers in stack
+	mov	r12d, 0		; Counter for numbers in stack
 	mov	r15d, 10	; Divisor
 
 loop:	; Push all digits to stack
@@ -21,7 +21,7 @@ loop:	; Push all digits to stack
 
 	push	rdx		; Rightmost digit is remainder; Push to stack
 	mov	rdx, 0		; Clear rdx
-	inc	r14d
+	inc	r12d
 
 	; Update myint
 	mov	[myint], eax
@@ -35,7 +35,7 @@ loop2init:	; Print each digit in the stack to the console
 	mov	r15d, 0		; Counter for digits printed
 
 loop2:
-	cmp	r15d, r14d	; Exit once all digits have been printed
+	cmp	r15d, r12d	; Exit once all digits have been printed
 	Je return
 
 	; Get next digit in stack
