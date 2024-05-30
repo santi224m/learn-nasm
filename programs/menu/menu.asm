@@ -23,6 +23,7 @@ total_price:	resd	1
 		extern	print_msg
 		extern	print_int
 		extern	print_nl
+		extern get_user_input
 
 _start:
 		; Print drink menu option
@@ -42,33 +43,16 @@ _start:
 		call	print_msg
 
 		; Take in user input for drinks count
-		mov	rax, 0
-		mov	rdi, 0
-		mov	esi, drink_count
-		mov	rdx, 4
-		syscall
+		call	get_user_input
+		mov	[drink_count], rax
 
-		; Remove 48 from user input to remove ascii offset
-		mov	r13d, [drink_count]
-		movzx	r13d, r13b			; Get first char only (not newline)
-		sub	r13d, 48
-		mov	[drink_count], r13d
-
+		; Prompt user for sandwiches
 		mov	rdi, prompt_sandwiches
 		call	print_msg
 
 		; Take in user input for sandwich count
-		mov	rax, 0
-		mov	rdi, 0
-		mov	rsi, sandwich_count
-		mov	rdx, 4
-		syscall
-
-		; Remove ascii offset from sandwich count
-		mov	r13d, [sandwich_count]
-		movzx	r13d, r13b
-		sub	r13, 48
-		mov	[sandwich_count], r13
+		call	get_user_input
+		mov	[sandwich_count], rax
 
 		; Calculate drink total
 		mov	r13, [drink_count]
