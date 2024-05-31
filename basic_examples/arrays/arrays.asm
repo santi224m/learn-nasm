@@ -1,9 +1,5 @@
 	section	.data
 arr:	dd	0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144
-nl:	db	'', 10
-
-	section	.bss
-char:	resb	1
 
 	section	.text
 	global	_start
