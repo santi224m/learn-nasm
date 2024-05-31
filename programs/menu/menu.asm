@@ -8,7 +8,9 @@ prompt_drinks:	db	'How many drinks? ', 0
 prompt_sandwiches:
 		db	'How many sandwiches? ', 0
 drink_total_msg:
-		db	'Drink total: ', 0
+		db	'Drink total: $', 0
+sandwich_total_msg:
+		db	'Sandwich total: $', 0
 
 		section	.bss
 drink_count:	resd	1
@@ -66,6 +68,18 @@ _start:
 		call	print_msg
 
 		mov	rdi, [drink_total]
+		call	print_int
+
+		; Calculate sandwich total
+		mov	r13, [sandwich_count]
+		mov	r14, [sandwich_price]
+		imul	r13, r14
+		mov	[sandwich_total], r13
+
+		; Prink sandwich total
+		mov	rdi, sandwich_total_msg
+		call	print_msg
+		mov	rdi, [sandwich_total]
 		call	print_int
 
 		; Exit
